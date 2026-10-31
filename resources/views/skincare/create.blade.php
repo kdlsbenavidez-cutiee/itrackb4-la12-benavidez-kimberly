@@ -38,18 +38,17 @@
         </div>
 
         <div class="mb-3">
-            <label for="category">Category</label>
-            <select name="category" id="category" class="form-control">
+            <label for="category_id">Category</label>
+            <select name="category_id" id="category_id" class="form-control">
                 <option value="">Select Category</option>
-                <option value="Cleanser" @selected(old('category') === 'Cleanser')>Cleanser</option>
-                <option value="Toner" @selected(old('category') === 'Toner')>Toner</option>
-                <option value="Serum" @selected(old('category') === 'Serum')>Serum</option>
-                <option value="Sunscreen" @selected(old('category') === 'Sunscreen')>Sunscreen</option>
-                <option value="Moisturizer" @selected(old('category') === 'Moisturizer')>Moisturizer</option>
-                <option value="Treatment" @selected(old('category') === 'Treatment')>Treatment</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
             </select>
 
-            @error('category')
+            @error('category_id')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>

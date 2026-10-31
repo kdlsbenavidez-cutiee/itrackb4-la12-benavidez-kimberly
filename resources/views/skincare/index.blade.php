@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 @section('title', 'Skincare Products')
 @section('content')
@@ -12,22 +13,21 @@
 
     <p>
         <strong>Category Filter:</strong>
-        <a href="{{ route('skincare.index', ['category' => 'Cleanser', 'brand' => $brand]) }}">Cleanser</a>
-        <a href="{{ route('skincare.index', ['category' => 'Toner', 'brand' => $brand]) }}">Toner</a>
-        <a href="{{ route('skincare.index', ['category' => 'Serum', 'brand' => $brand]) }}">Serum</a>
-        <a href="{{ route('skincare.index', ['category' => 'Sunscreen', 'brand' => $brand]) }}">Sunscreen</a>
-        <a href="{{ route('skincare.index', ['category' => 'Moisturizer', 'brand' => $brand]) }}">Moisturizer</a>
-        <a href="{{ route('skincare.index', ['category' => 'Treatment', 'brand' => $brand]) }}">Treatment</a>
+        @foreach ($categories as $item)
+            <a href="{{ route('skincare.index', ['category_id' => $item->id, 'brand' => $brand]) }}">
+                {{ $item->name }}
+            </a>
+        @endforeach
     </p>
 
     <p>
         <strong>Brand Filter:</strong>
-        <a href="{{ route('skincare.index', ['category' => $category, 'brand' => 'Celeteque']) }}">Celeteque</a>
-        <a href="{{ route('skincare.index', ['category' => $category, 'brand' => 'Luxe Organix']) }}">Luxe Organix</a>
-        <a href="{{ route('skincare.index', ['category' => $category, 'brand' => 'The Ordinary']) }}">The Ordinary</a>
-        <a href="{{ route('skincare.index', ['category' => $category, 'brand' => 'Belo']) }}">Belo</a>
-        <a href="{{ route('skincare.index', ['category' => $category, 'brand' => 'QuickFX']) }}">QuickFX</a>
-        <a href="{{ route('skincare.index', ['category' => $category, 'brand' => 'Oxecure']) }}">Oxecure</a>
+        <a href="{{ route('skincare.index', ['category_id' => $category, 'brand' => 'Celeteque']) }}">Celeteque</a>
+        <a href="{{ route('skincare.index', ['category_id' => $category, 'brand' => 'Luxe Organix']) }}">Luxe Organix</a>
+        <a href="{{ route('skincare.index', ['category_id' => $category, 'brand' => 'The Ordinary']) }}">The Ordinary</a>
+        <a href="{{ route('skincare.index', ['category_id' => $category, 'brand' => 'Belo']) }}">Belo</a>
+        <a href="{{ route('skincare.index', ['category_id' => $category, 'brand' => 'QuickFX']) }}">QuickFX</a>
+        <a href="{{ route('skincare.index', ['category_id' => $category, 'brand' => 'Oxecure']) }}">Oxecure</a>
     </p>
 
     <p>
@@ -57,7 +57,7 @@
                     </a>
                 </td>
                 <td>{{ $item['brand'] }}</td>
-                <td>{{ $item['category'] }}</td>
+                <td>{{ $item->category->name }}</td>
                 <td>₱{{ $item['price'] }}</td>
             </tr>
         @empty
@@ -66,5 +66,7 @@
             </tr>
         @endforelse
     </table>
+
+    <p>Number of Queries: {{ count(DB::getQueryLog()) }}</p>
 
 @endsection
