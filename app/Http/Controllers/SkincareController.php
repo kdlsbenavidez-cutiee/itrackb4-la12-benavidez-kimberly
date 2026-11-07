@@ -6,6 +6,7 @@ use App\Models\Skincare;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SkincareController extends Controller
 {
@@ -18,7 +19,7 @@ class SkincareController extends Controller
 
         $categories = Category::all();
 
-        $query = Skincare::with('category');
+     $query = Skincare::with('category');
 
         if ($category) {
             $query = $query->where('category_id', $category);
@@ -49,10 +50,12 @@ class SkincareController extends Controller
             'price' => 'required|numeric|min:1'
         ]);
 
-        Skincare::create($validated);
+       $skincare = Skincare::create($validated);
 
-        return redirect()->route('skincare.index')
-            ->with('success', 'Skincare product added successfully.');
+       Log::info('Skincare product saved', ['id' => $skincare->id]);
+
+       return redirect()->route('skincare.index')
+       ->with('success', 'Skincare product added successfully.');
     }
 
     public function show(Skincare $skincare)
@@ -83,6 +86,8 @@ class SkincareController extends Controller
 
     public function destroy(Skincare $skincare)
     {
+        abort_if($skincare->category->skincares()->count() === 1, 403);
+
         $skincare->delete();
 
         return redirect()->route('skincare.index');

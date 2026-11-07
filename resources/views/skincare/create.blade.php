@@ -1,14 +1,14 @@
+
 @extends('layouts.app')
 
-@section('title', 'Edit Skincare Product')
+@section('title', 'Create Skincare Product')
 
 @section('content')
 
-    <h2>Edit Skincare Product</h2>
+    <h2>Add Skincare Product</h2>
 
-    <form method="POST" action="{{ route('skincare.update', $skincare) }}">
+    <form method="POST" action="{{ route('skincare.store') }}">
         @csrf
-        @method('PUT')
 
         <div class="mb-3">
             <label for="product">Product</label>
@@ -72,7 +72,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Update Product</button>
+        <button type="submit" class="btn btn-primary">Add Product</button>
 
         <a href="{{ route('skincare.index') }}" class="btn btn-secondary">
             Cancel

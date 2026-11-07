@@ -1,14 +1,21 @@
-# ITRACKB4 - LA11: Finish Your Own CRUD
+# ITRACKB4 LA12 - Make the Failures Yours
 
-## G1. Route Model Binding
+## Activity Overview
 
-In my Skincare Products project, Route Model Binding requires the model to be type-hinted as `Skincare` and the parameter name to match the route segment `{skincare}`. If only one condition is correct, Laravel may not automatically provide the expected record to the controller method.
+This activity demonstrates Laravel 12 exception handling, application logging, HTTP error responses, and custom error pages using the Skincare Products project.
 
-## G2. Delete Link
+## H1. Why was the vendor file shown at the top of the error page not where the mistake was made?
 
-My Delete link opened the product detail page instead of deleting the record because an HTML link sends a GET request. The destroy route requires a DELETE request, so I replaced the link with a form using `@csrf` and `@method('DELETE')`.
+The vendor file was shown because Laravel's framework code handled the method call and detected that the requested method did not exist. However, the actual mistake was in my own `SkincareController.php`, where I accidentally used `withh()` instead of `with()`. The exception trace helped me locate the exact line in my controller where the error originated.
 
-## G3. old() Function
+## H2. What does a custom Log::info message with a context array tell the next developer that the error page could not?
 
-In my edit form, `old()` uses the existing Skincare record's value as its second argument. Without this fallback, the fields would be empty when first opening the edit form; without `old()` and using only the existing record's value, previously typed values would not be retained after a validation error.
+A custom `Log::info()` message with a context array provides useful information about an application event, such as when a skincare product was successfully saved and its actual database ID. This helps the next developer identify which record was involved without relying only on an error page. It also makes troubleshooting and tracking application activities easier.
 
+## H3. When is a 403 response better than redirecting back with a message?
+
+A 403 Forbidden response is better when a user attempts an action that is not allowed by the application's rules or authorization conditions. It clearly communicates that access to the requested action is forbidden. Redirecting back with a message is more appropriate for ordinary validation or user feedback when the user can continue using the application.
+
+## Conclusion
+
+Through this activity, I learned how to identify Laravel exceptions, control debug details, examine application logs, create custom log messages, protect records using HTTP 403 responses, and customize HTTP 404 and 500 error pages.
