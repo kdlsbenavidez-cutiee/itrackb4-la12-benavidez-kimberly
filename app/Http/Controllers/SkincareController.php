@@ -9,64 +9,83 @@ use Illuminate\Http\Request;
 
 class SkincareController extends Controller
 {
-    
-public function index(Request $request)
-{
-    DB::enableQueryLog();
+    public function index(Request $request)
+    {
+        DB::enableQueryLog();
 
-    $category = $request->query('category_id');
-    $brand = $request->query('brand');
+        $category = $request->query('category_id');
+        $brand = $request->query('brand');
 
-    $categories = Category::all();
+        $categories = Category::all();
 
-    $query = Skincare::with('category');
+        $query = Skincare::with('category');
 
-    if ($category) {
-        $query = $query->where('category_id', $category);
+        if ($category) {
+            $query = $query->where('category_id', $category);
+        }
+
+        if ($brand) {
+            $query = $query->where('brand', $brand);
+        }
+
+        $skincare = $query->get();
+
+        return view('skincare.index', compact('skincare', 'category', 'brand', 'categories'));
     }
-
-    if ($brand) {
-        $query = $query->where('brand', $brand);
-    }
-
-    $skincare = $query->get();
-
-    return view('skincare.index', compact('skincare', 'category', 'brand', 'categories'));
-}
-
-
-
 
     public function create()
     {
-         $categories = Category::all();
+        $categories = Category::all();
 
-    return view('skincare.create', compact('categories'));
+        return view('skincare.create', compact('categories'));
     }
 
-    
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'product' => 'required|max:255',
-        'brand' => 'required|max:255',
-        'category_id' => 'required|exists:categories,id',
-        'price' => 'required|numeric|min:1'
-    ]);
-
-    Skincare::create($validated);
-
-    return redirect()->route('skincare.index')
-        ->with('success', 'Skincare product added successfully.');
-}
-
-
-    public function show(string $id)
+    public function store(Request $request)
     {
-        $skincare = Skincare::findOrFail($id);
+        $validated = $request->validate([
+            'product' => 'required|max:255',
+            'brand' => 'required|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:1'
+        ]);
 
-         return view('skincare.show', ['item' => $skincare]);
+        Skincare::create($validated);
 
+        return redirect()->route('skincare.index')
+            ->with('success', 'Skincare product added successfully.');
+    }
+
+    public function show(Skincare $skincare)
+    {
+        return view('skincare.show', ['item' => $skincare]);
+    }
+
+    public function edit(Skincare $skincare)
+    {
+        $categories = Category::all();
+
+        return view('skincare.edit', compact('skincare', 'categories'));
+    }
+
+    public function update(Request $request, Skincare $skincare)
+    {
+        $validated = $request->validate([
+            'product' => 'required|max:255',
+            'brand' => 'required|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:1'
+        ]);
+
+        $skincare->update($validated);
+
+        return redirect()->route('skincare.index');
+    }
+
+    public function destroy(Skincare $skincare)
+    {
+        $skincare->delete();
+
+        return redirect()->route('skincare.index');
     }
 
     public function featured()

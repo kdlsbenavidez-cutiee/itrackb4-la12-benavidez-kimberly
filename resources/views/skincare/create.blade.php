@@ -1,11 +1,14 @@
 @extends('layouts.app')
-@section('title', 'Add Skincare Product')
+
+@section('title', 'Edit Skincare Product')
+
 @section('content')
 
-    <h2>Add Skincare Product</h2>
+    <h2>Edit Skincare Product</h2>
 
-    <form method="POST" action="{{ route('skincare.store') }}">
+    <form method="POST" action="{{ route('skincare.update', $skincare) }}">
         @csrf
+        @method('PUT')
 
         <div class="mb-3">
             <label for="product">Product</label>
@@ -41,6 +44,7 @@
             <label for="category_id">Category</label>
             <select name="category_id" id="category_id" class="form-control">
                 <option value="">Select Category</option>
+
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
                         {{ $category->name }}
@@ -68,7 +72,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-primary">Add Product</button>
+        <button type="submit" class="btn btn-primary">Update Product</button>
 
         <a href="{{ route('skincare.index') }}" class="btn btn-secondary">
             Cancel

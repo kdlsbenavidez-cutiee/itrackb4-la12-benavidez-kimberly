@@ -16,9 +16,8 @@ Route::get('/skincare/filter/{value?}', function ($value = null) {
     }
 
     return redirect()->route('skincare.index', [
-        'category' => $value
+        'category_id' => $value
     ]);
 })->name('skincare.filter');
 
-Route::resource('skincare', SkincareController::class)
-    ->only(['index', 'create', 'store', 'show']);
+Route::resource('skincare', SkincareController::class);

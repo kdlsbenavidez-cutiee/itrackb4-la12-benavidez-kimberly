@@ -1,0 +1,82 @@
+@extends('layouts.app')
+
+@section('title', 'Edit Skincare Product')
+
+@section('content')
+
+    <h2>Edit Skincare Product</h2>
+
+    <form method="POST" action="{{ route('skincare.update', $skincare) }}">
+        @csrf
+        @method('PUT')
+
+        <div class="mb-3">
+            <label for="product">Product</label>
+            <input
+                type="text"
+                name="product"
+                id="product"
+                class="form-control"
+                value="{{ old('product', $skincare->product) }}"
+            >
+
+            @error('product')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="brand">Brand</label>
+            <input
+                type="text"
+                name="brand"
+                id="brand"
+                class="form-control"
+                value="{{ old('brand', $skincare->brand) }}"
+            >
+
+            @error('brand')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="category_id">Category</label>
+            <select name="category_id" id="category_id" class="form-control">
+                <option value="">Select Category</option>
+
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" @selected(old('category_id', $skincare->category_id) == $category->id)>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+
+            @error('category_id')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <label for="price">Price</label>
+            <input
+                type="number"
+                name="price"
+                id="price"
+                class="form-control"
+                value="{{ old('price', $skincare->price) }}"
+            >
+
+            @error('price')
+                <div class="text-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Product</button>
+
+        <a href="{{ route('skincare.index') }}" class="btn btn-secondary">
+            Cancel
+        </a>
+    </form>
+
+@endsection
